@@ -1,5 +1,9 @@
 #if defined _DEBUG
 #include <dbghelp.h>
+static HANDLE processHandle;
+static CRITICAL_SECTION lock;
+#else
+#warning Not built with debug information.
 #endif
 
 char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
@@ -8,8 +12,6 @@ char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
     if (!ptr) return _strdup("NULL");
 
 #if defined _DEBUG
-    CRITICAL_SECTION lock;
-    static HANDLE processHandle;
     char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME*sizeof(TCHAR)] = {0};
     DWORD64 dis = 0;
     PSYMBOL_INFO pSym = (PSYMBOL_INFO)buffer;
@@ -58,4 +60,32 @@ char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
     }
     return _strdup(pSym->Name);
 #endif
+
+}
+
+void* WINAPI symbolAddr(const char* name)
+{
+#if defined _DEBUG
+    SYMBOL_INFO sym = {0};
+    BOOL success;
+
+    sym.SizeOfStruct = sizeof(PSYMBOL_INFO);
+    sym.MaxNameLength = 0;
+
+    EnterCriticalSection(&lock);
+    if (!processHandle)
+    {
+        processHandle = GetCurrentProcess();
+        SymInitialize(processHandle, NULL, TRUE);
+    }
+
+    success = SymFromName(processHandle, name, &sym);
+    LeaveCriticalSection(&lock);
+
+    if (success)
+    {
+        return sym.Address;
+    }
+#endif
+    return NULL;
 }
