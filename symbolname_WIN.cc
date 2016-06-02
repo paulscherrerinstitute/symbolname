@@ -9,7 +9,7 @@ static CRITICAL_SECTION lock;
 #include "epicsExport.h"
 #include "symbolname.h"
 
-char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
+char* symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
 {
     /* handle NULL pointer */
     if (!ptr) return _strdup("NULL");
@@ -63,10 +63,9 @@ char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
     }
     return _strdup(pSym->Name);
 #endif
-
 }
 
-void* WINAPI symbolAddr(const char* name)
+void* symbolAddr(const char* name)
 {
 #if defined _DEBUG
     SYMBOL_INFO sym = {0};
