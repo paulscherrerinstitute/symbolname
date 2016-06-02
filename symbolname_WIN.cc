@@ -6,6 +6,9 @@ static CRITICAL_SECTION lock;
 #warning Not built with debug information.
 #endif
 
+#include "epicsExport.h"
+#include "symbolname.h"
+
 char* WINAPI symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
 {
     /* handle NULL pointer */

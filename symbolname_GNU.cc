@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cxxabi.h>
-#include "symbolname.h"
 
-extern "C" {
+#include "epicsExport.h"
+#include "symbolname.h"
 
 char* symbolName(void* ptr, int withFilename /* 1=file, 2=full path */)
 {
@@ -51,5 +51,3 @@ void* symbolAddr(const char* name)
     void* addr = dlsym(RTLD_DEFAULT, name);
     return addr;
 }
-
-} // extern "C"
