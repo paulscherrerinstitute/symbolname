@@ -9,7 +9,7 @@ extern "C" {
 
 /* Resolve pointer to function or variable name in allocated buffer */
 /* release with free() */
-epicsShareFunc char* symbolName(void* ptr, unsigned int flags);
+epicsShareFunc char* symbolName(const void* ptr, unsigned int flags);
 /* flags: */
 #define F_SYMBOL_NAME_WITH_FILE    0x01
 #define F_SYMBOL_NAME_WITH_PATH    0x02

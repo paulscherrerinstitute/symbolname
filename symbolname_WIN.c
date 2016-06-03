@@ -9,7 +9,7 @@ static CRITICAL_SECTION lock;
 #include "epicsExport.h"
 #include "symbolname.h"
 
-char* symbolName(void* ptr, unsigned int flags)
+char* symbolName(const void* ptr, unsigned int flags)
 {
     /* handle NULL pointer */
     if (!ptr) return _strdup("NULL");

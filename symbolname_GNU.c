@@ -13,7 +13,7 @@ __cxa_demangle(const char* __mangled_name, char* __output_buffer,
 #include "epicsExport.h"
 #include "symbolname.h"
 
-char* symbolName(void* ptr, unsigned int flags)
+char* symbolName(const void* ptr, unsigned int flags)
 {
     Dl_info sym = {0};
     char *result;
