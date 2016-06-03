@@ -29,7 +29,8 @@ static const iocshFuncDef symbolAddrDef =
 static void symbolAddrFunc (const iocshArgBuf *args)
 {
     void* addr = symbolAddr(args[0].sval);
-    printf("%p\n", addr);
+    if (!addr) printf ("NULL\n");
+    else printf("%p\n", addr);
 }
 
 static void symbolnameRegistrar(void)
