@@ -1,7 +1,9 @@
 #ifndef symbolname_h
 #define symbolname_h
 
-#include "shareLib.h"
+#ifndef epicsShareFunc
+#define epicsShareFunc
+#endif
 
 #ifdef __cplusplus
 extern "C" {

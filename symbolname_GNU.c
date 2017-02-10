@@ -10,7 +10,6 @@ extern char*
 __cxa_demangle(const char* __mangled_name, char* __output_buffer,
 		 size_t* __length, int* __status);
 
-#include "epicsExport.h"
 #include "symbolname.h"
 
 char* symbolName(const void* ptr, unsigned int flags)
