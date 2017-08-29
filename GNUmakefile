@@ -1,5 +1,6 @@
 include /ioc/tools/driver.makefile
 BUILDCLASSES += Linux
+EXCLUDE_ARCHS = T202
 
 SOURCES = -none-
 SOURCES_Linux = symbolname_GNU.c

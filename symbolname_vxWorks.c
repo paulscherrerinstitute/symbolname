@@ -1,5 +1,6 @@
 #include <vxWorks.h>
 #include <symLib.h>
+#include <private/symLibP.h>
 #include <sysSymTbl.h>
 #include <moduleLib.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@ char* symbolName(const void* ptr, unsigned int flags)
     }
 
     /* resolve address and check for exact match */
-    if (symFindSymbol(sysSymTbl, NULL, ptr, SYM_TEXT, SYM_MASK_ALL-SYM_GLOBAL, &symId) != OK
+    if (symFindSymbol(sysSymTbl, NULL, (void*)ptr, SYM_TEXT, SYM_MASK_ALL-SYM_GLOBAL, &symId) != OK
         || symId->value != ptr)
     {
         result = malloc(sizeof(void*)*2+3);
