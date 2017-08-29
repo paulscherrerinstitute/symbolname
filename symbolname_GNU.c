@@ -1,5 +1,7 @@
 /* Utility: return function name in allocated buffer */
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* needed for dladdr() */
+#endif
 #include <dlfcn.h>
 #include <string.h>
 #include <stdio.h>
