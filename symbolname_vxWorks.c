@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <cplusLib.h>
 
-#include "epicsExport.h"
 #include "symbolname.h"
 
 char* symbolName(const void* ptr, unsigned int flags)

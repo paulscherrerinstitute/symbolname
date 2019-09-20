@@ -10,7 +10,7 @@
 /* #include <cxxabi.h> hard to find from non C++ code */
 extern char*
 __cxa_demangle(const char* __mangled_name, char* __output_buffer,
-		 size_t* __length, int* __status);
+    size_t* __length, int* __status);
 
 #include "symbolname.h"
 
@@ -43,7 +43,7 @@ char* symbolName(const void* ptr, unsigned int flags)
             if (p) *p = 0;
         }
     }
-    
+
     /* add file name */
     if (sym.dli_fname && flags & (F_SYMBOL_NAME_WITH_FILE | F_SYMBOL_NAME_WITH_PATH))
     {
