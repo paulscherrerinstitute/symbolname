@@ -16,7 +16,7 @@ char* symbolName(const void* ptr, unsigned int flags)
 
 #if defined _DEBUG
     char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME*sizeof(TCHAR)] = {0};
-    DWORD64 dis = 0;
+    DWORD64 offs = 0;
     PSYMBOL_INFO pSym = (PSYMBOL_INFO)buffer;
     BOOL success;
 
@@ -30,10 +30,10 @@ char* symbolName(const void* ptr, unsigned int flags)
         SymInitialize(processHandle, NULL, TRUE);
     }
 
-    success = SymFromAddr(processHandle, ptr, &dis, pSym);
+    success = SymFromAddr(processHandle, ptr, &offs, pSym);
     LeaveCriticalSection(&lock);
 
-    if (!success || dis != 0)
+    if (!success || (offs && !(flags & F_SYMBOL_NAME_ALLOW_OFFSET)))
 #endif
     {
         result = malloc(sizeof(void*)*2+3)
@@ -42,9 +42,17 @@ char* symbolName(const void* ptr, unsigned int flags)
     }
 
     /* demangle C++ function names */
-    /* TODO How does this work? */    
-    
+    /* TODO How does this work? */
+    name = pSym->Name;
+
 #if defined _DEBUG
+    if (offs)
+    {
+        char *plainname = name;
+        name = malloc(strlen(plainname)+sizeof(void*)*2+4));
+        if (name) sprintf(name, "%s+%#llx", plainname, offs);
+    }
+
     /* add file name */
     if (flags & (F_SYMBOL_NAME_WITH_FILE | F_SYMBOL_NAME_WITH_PATH))
     {
@@ -61,12 +69,14 @@ char* symbolName(const void* ptr, unsigned int flags)
                 const char *p = strrchr(file, '\\');
                 if (p) file = p+1;
             }
-            result = malloc(strlen(pSym->Name) + strlen(file) + 24);
+            result = malloc(strlen(name) + strlen(file) + 24);
             sprintf(result, "%s [%s:%d]", name, file, line.LineNumber);
+            if (name != pSym->Name) free(name);
             return result;
         }
     }
-    return _strdup(pSym->Name);
+    if (name != pSym->Name) return name;
+    return _strdup(name);
 #endif
 }
 
